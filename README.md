@@ -1,0 +1,2 @@
+# Akinator
+guessing characters
