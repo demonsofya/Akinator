@@ -25,6 +25,18 @@ typedef char* TreeElem_t;
 #include "lib\onegin\buffer.h"
 #include <stdio.h>
 
+//-----------------------------------------------------------------------------
+//-------FILES----------
+#define OUTPUT_FILE_FOR_TREE    AKINATOR_BASE_FILE
+#define INPUT_FILE_FOR_TREE     "akinator_base.txt"
+
+extern FILE *AKINATOR_BASE_FILE;
+extern const char *DEFAULT_OUTPUT_TREE_FILE_NAME;
+
+extern FILE *INPUT_LOGFILE;
+extern const char *DEFAULT_INPUT_LOGFILE_NAME;
+
+//-----------------------------------------------------------------------------
 
 struct TreeNode_t {
     TreeElem_t data;
