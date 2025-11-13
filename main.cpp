@@ -1,12 +1,7 @@
 #include <stdio.h>
 
 #define TX_USE_SPEAK
-//#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\sapi.h"
-//#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
 #include "TXLib.h"
-
-//#include "C:\Users\sonya\MinGw-7-zip\MinGW\x86_64-w64-mingw32\include\sapi.h"
-//#include <sapi.h>
 
 #include "akinator_struct.h"
 #include "akinator_dump.h"
