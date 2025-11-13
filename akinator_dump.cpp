@@ -7,10 +7,9 @@
 
 //=============================================================================
 
-#define SEREGA LOGFILE
 FILE *LOGFILE = OpenLogFile();
 
-const char DEFAULT_LOG_FILE_NAME[] = "AkinatorLogFile.html";
+const char *DEFAULT_LOG_FILE_NAME = "AkinatorLogFile.html";
 
 //-----------------------------------------------------------------------------
 
@@ -34,8 +33,8 @@ FILE* OpenLogFile() {
 
 void CloseLogFile() {
 
-    printf("Programm ended\n");
     fclose(SEREGA);
+    printf("Log file closed succesfully\n");
 }
 
 //=============================================================================
@@ -108,7 +107,7 @@ void TreeDumpPrintErrors(Tree_t *tree, const char *file_name, const char *functi
 
 void TreeDumpCreateGraphFile(Tree_t *tree) {
 
-    if (tree == NULL)
+    if (tree == NULL || tree->root == NULL)
         return;
 
     char *DotFileName = CreateDotFileName("txt");
@@ -179,16 +178,16 @@ int DrawDotNode(const TreeNode_t *node, FILE *dot_file_ptr, int rank_num, int no
     int curr_node_num = node_num;
 
     if (node->left != NULL && node->right != NULL)
-        fprintf(dot_file_ptr, "%s [label = \"{ "TREE_TYPE_OUTPUT"? | { yes | no } }\", rank = %d]\n",
+        fprintf(dot_file_ptr, "%s [label = \"{ " TREE_TYPE_OUTPUT "? | { <yes> yes | <no> no } }\", rank = %d]\n",
                                 curr_node_name, node->data, rank_num);
     else
-        fprintf(dot_file_ptr, "%s [label = \"{ "TREE_TYPE_OUTPUT" | { 0 | 0 } }\", rank = %d]\n",
+        fprintf(dot_file_ptr, "%s [label = \"{ " TREE_TYPE_OUTPUT " | { 0 | 0 } }\", rank = %d]\n",
                                 curr_node_name, node->data, rank_num);
    ON_DEBUG(fprintf(stderr, "curr data %s\n", node->data));
     if (node->left != NULL) {
         node_num = DrawDotNode(node->left, dot_file_ptr, rank_num + 1, node_num + 1);
         char *left_node_name = GetNodeName(curr_node_num + 1);
-        fprintf(dot_file_ptr,  "%s -> %s\n", curr_node_name, left_node_name);
+        fprintf(dot_file_ptr,  "%s:<yes> -> %s\n", curr_node_name, left_node_name);
         curr_node_num = node_num;
         free(left_node_name);
     }
@@ -196,7 +195,7 @@ int DrawDotNode(const TreeNode_t *node, FILE *dot_file_ptr, int rank_num, int no
     if (node->right != NULL) {
         node_num = DrawDotNode(node->right, dot_file_ptr, rank_num + 1, node_num + 1);
         char *right_node_name = GetNodeName(curr_node_num + 1);
-        fprintf(dot_file_ptr,  "%s -> %s\n", curr_node_name, right_node_name);
+        fprintf(dot_file_ptr,  "%s:<no> -> %s\n", curr_node_name, right_node_name);
         free(right_node_name);
     }
 
