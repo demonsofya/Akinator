@@ -2,8 +2,11 @@
 
 #define TX_USE_SPEAK
 //#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\sapi.h"
-#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
-//#include "C:\Users\sonya\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
+//#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
+#include "TXLib.h"
+
+//#include "C:\Users\sonya\MinGw-7-zip\MinGW\x86_64-w64-mingw32\include\sapi.h"
+//#include <sapi.h>
 
 #include "akinator_struct.h"
 #include "akinator_dump.h"
@@ -11,12 +14,16 @@
 int main() {
 
     Tree_t *tree = TreeCtor();
+    txSpeak("<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"fr\">"
+            "<p> Thank you for choosing my akinator programm.</p>"
+            "<p> To guess you character push g. </p>"
+            "<p> To print object definition push p. </p>"
+            "<p> To save information base in file push s. </p>"
+            "<p> To load information base from file push l. </p>"
+            "<p> To compare objects push d. </p>"
+            "<p> To end the programm push f. </p> </speak>");
 
     while (true) {
-        txSpeak("Thank you for choosing my akinator programm. To guess you character push g."
-                "To print object definition push p. To save information base in file push s."
-                "To load information base from file push l. To compare objects push d."
-                "To end the programm push f.")
         fprintf(OUTPUT_FILE, "\nGuess your character [g]\n"
                              "Print object definition [p]\n"
                              "Save progress [s]\n"

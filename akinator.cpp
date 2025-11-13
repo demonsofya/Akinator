@@ -4,9 +4,16 @@
 #include <string.h>
 #include <ctype.h>
 
+//#define TX_USE_SPEAK
+//#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\sapi.h"
+//#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
+
+//#include "C:\Users\sonya\MinGw-7-zip\MinGW\x86_64-w64-mingw32\include\sapi.h"
+
 #define TX_USE_SPEAK
 //#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\sapi.h"
-#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
+//#include "..\..\..\..\код блок от деда\CodeBlocks\MinGW\include\TXLib.h"
+#include "TXLib.h"
 
 #include "akinator_struct.h"
 #include "akinator_dump.h"
@@ -165,6 +172,7 @@ int InsertNewVariant(Tree_t *tree, TreeNode_t *node) {
     node->left = new_node;
 
     fprintf(OUTPUT_FILE, "What it was?\n");
+    txSpeak("What object did you guess?");
     new_node->data = GetAnswerString();
 
     if (new_node->data == NULL) {
@@ -251,7 +259,7 @@ int GiveDefinitionForObject(Tree_t *tree) {
 
     if (search_result == NULL) {
         fprintf(OUTPUT_FILE, "Object didn't find\n");
-        txSpeak("Object didn't find");
+        txSpeak("I didn't find object that you guess");
 
         Return_Tree_Error(tree);
     }
