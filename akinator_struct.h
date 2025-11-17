@@ -11,7 +11,7 @@ typedef char* TreeElem_t;
 
 //-----------------------------------------------------------------------------
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
     #define ON_DEBUG(...) __VA_ARGS__
@@ -21,9 +21,14 @@ typedef char* TreeElem_t;
 
 //-----------------------------------------------------------------------------
 
+#define PRINT_IMAGE_
+
 #include "lib\stack\stack.h"
 #include "lib\onegin\buffer.h"
 #include <stdio.h>
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 //-------FILES----------
@@ -35,6 +40,8 @@ extern const char *DEFAULT_OUTPUT_TREE_FILE_NAME;
 
 extern FILE *INPUT_LOGFILE;
 extern const char *DEFAULT_INPUT_LOGFILE_NAME;
+
+bool DrawAkinator();
 
 //-----------------------------------------------------------------------------
 

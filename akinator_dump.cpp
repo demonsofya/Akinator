@@ -13,9 +13,24 @@ const char *DEFAULT_LOG_FILE_NAME = "AkinatorLogFile.html";
 
 //-----------------------------------------------------------------------------
 
-const char *ERROR_RED_COLOR     = "CC0000";
-const char *LAVANDER_PINK_COLOR = "fff0f5";
-const char *SOFT_PINK_COLOR     = "ff97bb";
+const char *DARK_RED_COLOR             = "990000";
+const char *PURPLE_BLUE_COLOR          = "6666FF";
+const char *LIGHT_PURPLE_PINK_COLOR    = "baacc7";
+const char *SOFT_PURPLE_COLOR          = "876f9e";
+const char *LIGHT_BLUE_COLOR           = "99CCFF";
+const char *DEEP_BLUE_COLOR            = "0066cc";
+const char *ERROR_RED_COLOR            = "CC0000";
+const char *LIGHT_PASTEL_RED_COLOR     = "FF6666";
+const char *HOLY_WIGHT_COLOR           = "f5f5dc";
+const char *GRASS_GREEN_COLOR          = "4C9900";
+const char *LAVANDER_BLUE_COLOR        = "ccccff";
+const char *COBALITE_COLOR             = "9999ff";
+const char *LIGHT_YELLOW_GREEN_COLOR   = "CCFF99";
+const char *PASTEL_PURPLE_PINK_COLOR   = "cfa6e0";
+const char *LIGHT_GRAY_PURPLE_COLOR    = "e3cced";
+const char *BRIGHT_GREEN_COLOR         = "66CC00";
+const char *LAVANDER_PINK_COLOR        = "fff0f5";
+const char *SOFT_PINK_COLOR            = "ff97bb";
 
 const int MAX_DOT_NAME_SIZE      = 100;
 const int MAX_DOT_FILE_NAME_SIZE = 100;
@@ -62,7 +77,7 @@ void TreeDump(Tree_t *tree, const char *file_name, const char *function_name,
 
     TreeDumpPrintErrors(tree, file_name, function_name, line_number, calling_reason_string, curr_error);
 
-    TreeDumpCreateGraphFile(tree);
+    TreeDumpCreateGraphFile(tree->root);
 }
 
 //-----------------------------------------------------------------------------
@@ -105,9 +120,9 @@ void TreeDumpPrintErrors(Tree_t *tree, const char *file_name, const char *functi
 
 //-----------------------------------------------------------------------------
 
-void TreeDumpCreateGraphFile(Tree_t *tree) {
+void TreeDumpCreateGraphFile(TreeNode_t *root) {
 
-    if (tree == NULL || tree->root == NULL)
+    if (root == NULL)
         return;
 
     char *DotFileName = CreateDotFileName("txt");
@@ -127,7 +142,7 @@ void TreeDumpCreateGraphFile(Tree_t *tree) {
     }
 
     PrintDotFileHeader(dot_file_ptr, DotFilePngName);
-    DrawDotNode(tree->root, dot_file_ptr, 1, 1);
+    DrawDotNode(root, dot_file_ptr, 1, 1);
     PrintDotFileEnd(dot_file_ptr);
 
     fclose(dot_file_ptr);
@@ -183,7 +198,7 @@ int DrawDotNode(const TreeNode_t *node, FILE *dot_file_ptr, int rank_num, int no
     else
         fprintf(dot_file_ptr, "%s [label = \"{ " TREE_TYPE_OUTPUT " | { 0 | 0 } }\", rank = %d]\n",
                                 curr_node_name, node->data, rank_num);
-   ON_DEBUG(fprintf(stderr, "curr data %s\n", node->data));
+
     if (node->left != NULL) {
         node_num = DrawDotNode(node->left, dot_file_ptr, rank_num + 1, node_num + 1);
         char *left_node_name = GetNodeName(curr_node_num + 1);

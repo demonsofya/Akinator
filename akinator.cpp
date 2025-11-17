@@ -12,6 +12,17 @@
 #include "lib/stack/stack.h"
 #include "lib\onegin\buffer.h"
 
+
+//=============================================================================
+
+const HDC boy_image_dissapoint    = txLoadImage("images/akinator_boy_1.bmp");
+const HDC boy_image_cringe_1      = txLoadImage("images/akinator_boy_2.bmp");
+const HDC boy_image_what_the_f    = txLoadImage("images/akinator_boy_3.bmp");
+const HDC boy_image_ok            = txLoadImage("images/akinator_boy_4.bmp");
+const HDC boy_image_train         = txLoadImage("images/akinator_boy_5.bmp");
+const HDC boy_image_cringe_2      = txLoadImage("images/akinator_boy_6.bmp");
+const HDC boy_image_fuck_you      = txLoadImage("images/akinator_boy_7.bmp");
+
 //=============================================================================
 
 FILE *AKINATOR_BASE_FILE = OpenOutputFile();
@@ -20,12 +31,30 @@ const char *DEFAULT_OUTPUT_TREE_FILE_NAME = "Akinator_output_file.txt";
 FILE *INPUT_LOGFILE = OpenInputLogFile();
 const char *DEFAULT_INPUT_LOGFILE_NAME = "ImputLogfileAkinator.html";
 
-//-----------------------------------------------------------------------------
+
+//=============================================================================
 
 FILE* OpenOutputFile() {
 
     FILE *file_ptr = fopen(DEFAULT_OUTPUT_TREE_FILE_NAME, "w");
     atexit(CloseOutputFile);
+
+    txCreateWindow(600, 800);
+
+    txSetColor (TX_BROWN);
+    txSelectFont("Comic Sans MS", 40);
+
+    txSpeak ("\a <speak version=\"1.0\" xmlns='http://www.w3.org/2001/10/synthesis' xml:lang=\"ru\">"
+            "<p> Thank you for choosing my akinator programm.</p>"
+            "<p> To guess you character push g. </p>"
+            "<p> To print object definition push p. </p>"
+            "<p> To save information base in file push s. </p>"
+            "<p> To load information base from file push l. </p>"
+            "<p> To compare objects push d. </p>"
+            "<p> To end the programm push f. На русском кстати тоже шпарю</p></speak>");
+
+    txBitBlt ( 0, 0, boy_image_cringe_1);
+    txTextOut(40, 200, "HELLO!",  txDC() );
 
     return file_ptr;
 }
@@ -33,6 +62,7 @@ FILE* OpenOutputFile() {
 void CloseOutputFile() {
 
     fclose(OUTPUT_FILE_FOR_TREE);
+    txDestroyWindow();
     printf("Output file closed succesfully\n");
 }
 
@@ -160,24 +190,33 @@ int InsertNewVariant(Tree_t *tree, TreeNode_t *node) {
     node->right = old_node;
     node->left = new_node;
 
-    fprintf(OUTPUT_FILE, "What it was?\n");
-    txSpeak("What object did you guess?");
+    txBitBlt(0, 0, boy_image_what_the_f);
+    txTextOut(40, 200, "What did you guessed?",  txDC() );
+
+    txSpeak("\v What it was?\n");
     new_node->data = GetAnswerString();
 
     if (new_node->data == NULL) {
-        fprintf(OUTPUT_FILE, "ERROR: Answer error.\n");
+        txSpeak("\vERROR: Answer error.\n");
+        txBitBlt(0, 0, boy_image_fuck_you);
+
         return AnswerAkinatorError;
     }
 
     new_node->data_hash = CountStringHashDJB2(new_node->data);
 
-    fprintf(OUTPUT_FILE, "What's the difference between " TREE_TYPE_OUTPUT " and " TREE_TYPE_OUTPUT "?"
+    txSpeak("\v What's the difference between " TREE_TYPE_OUTPUT " and " TREE_TYPE_OUTPUT "?"
                           TREE_TYPE_OUTPUT " is...\n",
                           new_node->data, old_node->data, new_node->data);
+
     node->data = GetAnswerString();
 
     if (node->data == NULL) {
-        fprintf(OUTPUT_FILE, "ERROR: Answer error.\n");
+        txSpeak("\vERROR: Answer error.\n");
+
+        txSpeak("Что за бред ты ввел");
+        txBitBlt(0, 0, boy_image_fuck_you);
+
         return AnswerAkinatorError;
     }
 
@@ -193,9 +232,13 @@ int FindObject(Tree_t *tree) {
 
     TreeNode_t *curr_node = tree->root;
 
+//txSpeak ("TX Library is cool!");
+
     while (curr_node != NULL) {
 
-        fprintf(OUTPUT_FILE, "Is your object " TREE_TYPE_OUTPUT "? [y]/[n]\n", curr_node->data);
+        txBitBlt(0, 0, boy_image_train);
+        txTextOut(0, 200, "Is your object?...",  txDC() );
+        txSpeak("\v Is your object " TREE_TYPE_OUTPUT "? [y]/[n]\n", curr_node->data);
 
         int curr_answer = 0;
         scanf(" %c", &curr_answer);
@@ -203,8 +246,13 @@ int FindObject(Tree_t *tree) {
         Continue_If_Answer_Error();
 
         if (curr_answer == 'y') {
-            if (curr_node->left == NULL)
-                fprintf(OUTPUT_FILE, "Your ibject is " TREE_TYPE_OUTPUT "\n", curr_node->data);
+            if (curr_node->left == NULL) {
+                txBitBlt(0, 0, boy_image_ok);
+                txTextOut(40, 200, "I'd figured out your object!",  txDC() );
+
+                txSpeak("\v Your object is " TREE_TYPE_OUTPUT "\n", curr_node->data);
+                txSpeak("Еще одно доказательство, что машина лучше человека");
+            }
 
             curr_node = curr_node->left;
 
@@ -213,7 +261,7 @@ int FindObject(Tree_t *tree) {
                 int insert_error = InsertNewVariant(tree, curr_node);
 
                 if (insert_error != NoTreeError) {
-                    fprintf(OUTPUT_FILE, "Error with new value.\n");
+                    txSpeak("\v Error with new value.\n");
                     break;
                 }
 
@@ -222,8 +270,11 @@ int FindObject(Tree_t *tree) {
 
             curr_node = curr_node->right;
 
-        } else
-            fprintf(OUTPUT_FILE, "No such vatiant. Try arain\n");
+        } else {
+            txBitBlt(0, 0, boy_image_fuck_you);
+            txSpeak("\vNo such vatiant. Try arain\n");
+            txSpeak("За базар отвечай");
+        }
     }
 
     Return_Tree_Error(tree);
@@ -237,8 +288,10 @@ int GiveDefinitionForObject(Tree_t *tree) {
 
     Return_If_Tree_Error(tree);
 
-    fprintf(OUTPUT_FILE, "Print name of the object\n");
-    txSpeak("Print name of the object");
+    txBitBlt ( 0, 0, boy_image_cringe_2);
+    txTextOut(40, 200, "Print your object",  txDC() );
+
+    txSpeak("\vPrint name of the object\n");
     char *object_name = GetAnswerString();
 
     Stack_t object_path = {};
@@ -247,8 +300,7 @@ int GiveDefinitionForObject(Tree_t *tree) {
     TreeNode_t *search_result = FindObjectByName(tree, tree->root, object_name, &object_path);
 
     if (search_result == NULL) {
-        fprintf(OUTPUT_FILE, "Object didn't find\n");
-        txSpeak("I didn't find object that you guess");
+        txSpeak("\vObject didn't find\n");
 
         Return_Tree_Error(tree);
     }
@@ -262,8 +314,7 @@ int PrintObjectCharacteristicsSinceNode(Tree_t *tree, TreeNode_t *curr_node, Sta
     assert(object_path);
     assert(curr_node);
 
-    //TreeNode_t *curr_node = tree->root;
-    //fprintf(OUTPUT_FILE, "\nObject ");
+    txTextOut(20, 200, "Your object is...",  txDC() );
 
     while (curr_node != NULL) {
         int curr_path = 0;
@@ -277,7 +328,7 @@ int PrintObjectCharacteristicsSinceNode(Tree_t *tree, TreeNode_t *curr_node, Sta
             curr_node = curr_node->left;
 
         } else {
-            fprintf(OUTPUT_FILE, "not " TREE_TYPE_OUTPUT "; ", curr_node->data);
+            txSpeak("\vnot " TREE_TYPE_OUTPUT "; ", curr_node->data);
             curr_node = curr_node->right;
 
         }
@@ -350,10 +401,10 @@ int CompareTwoObjects(Tree_t *tree) {
 
     Return_If_Tree_Error(tree);
 
-    fprintf(OUTPUT_FILE, "Print first object name\n");
+    txSpeak("\vPrint first object name\n");
     char *first_object_name = GetAnswerString();
 
-    fprintf(OUTPUT_FILE, "Print second object name\n");
+    txSpeak("\vPrint second object name\n");
     char *second_object_name = GetAnswerString();
 
     Stack_t first_object_path = {};
@@ -367,7 +418,7 @@ int CompareTwoObjects(Tree_t *tree) {
 
 
     if (first_search_result == NULL || second_search_result == NULL) {
-        fprintf(OUTPUT_FILE, "Object didn't find\n");
+        txSpeak("\vObject didn't find\n");
 
         Return_Tree_Error(tree);
     }
@@ -389,14 +440,19 @@ int PrintObjectsDifferent(Tree_t *tree, Stack_t *first_object_path, Stack_t *sec
         StackPop(second_object_path, &second_path);
 
         if (first_path != 'l' && first_path != 'r' || second_path != 'l' && second_path != 'r') {
-            fprintf(OUTPUT_FILE, "Comparing objects error\n");
+            txSpeak("\vComparing objects error\n");
             break;
         }
 
         if (first_path != second_path) {
-            fprintf(OUTPUT_FILE, "\nFirst object is ");
+            txBitBlt ( 0, 0, boy_image_train);
+
+            txTextOut(40, 200, "First object characteristics...",  txDC() );
+            txSpeak("\v\nFirst object is ");
             PrintObjectCharacteristicsSinceNode(tree, curr_node, first_object_path);
-            fprintf(OUTPUT_FILE, "\nSecond object is ");
+
+            txTextOut(40, 200, "Second object characteristics...",  txDC() );
+            txSpeak("\v\nSecond object is ");
             PrintObjectCharacteristicsSinceNode(tree, curr_node, second_object_path);
 
             Return_Tree_Error(tree);
@@ -410,7 +466,7 @@ int PrintObjectsDifferent(Tree_t *tree, Stack_t *first_object_path, Stack_t *sec
 
     }
 
-    fprintf(OUTPUT_FILE, "Comparing objects error\n");
+    txSpeak("\vComparing objects error\n");
 
     Return_Tree_Error(tree);
 }
@@ -455,11 +511,11 @@ TreeNode_t *GetAkinatorBaseFromFile() {
     char *buffer = GetBuffer(INPUT_FILE_FOR_TREE, &buffer_size);
 
     if (buffer == NULL) {
-        fprintf(OUTPUT_FILE, "Input file error\n");
+        txSpeak("\vInput file error\n");
         return NULL;
     }
 
-//ON_DEBUG(fprintf(OUTPUT_FILE, "\n\n%s\n\n", buffer));
+//ON_DEBUG(txSpeak("\v\n\n%s\n\n", buffer));
 ON_DEBUG(buffer_begin = buffer);
 
     return ReadCurrNode(&buffer);
@@ -493,8 +549,6 @@ ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump in the begin of readin
         TreeNode_t *new_node = (TreeNode_t *) calloc(1, sizeof(TreeNode_t));
         (*curr_symbol)++;
 
-ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump after skipping '('"));
-
         size_t data_len = 0;
         sscanf(*curr_symbol, " \"%*[^\"]\"%n", &data_len);
 
@@ -503,17 +557,24 @@ ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump after skipping '('"));
         new_node->data_hash = CountStringHashDJB2(new_node->data);
 
         (*curr_symbol) += data_len;
+ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Tree dump after creating new node without sons"));
+ON_DEBUG(TreeDumpCreateGraphFile(new_node));
 
 ON_DEBUG(fprintf(INPUT_LOGFILE, "data size is %d, data is %s[%p]\n", data_len, new_node->data, &new_node->data));
-
         new_node->left = ReadCurrNode(curr_symbol);
 
         new_node->right = ReadCurrNode(curr_symbol);
 
         SkipSpaces(curr_symbol);
+
+        if (**curr_symbol != ')') {
+            txSpeak("\vRead from input file error: SYNTAX ERROR\n");
+            return NULL;
+        }
         (*curr_symbol)++;
 
 ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump after reading new node"));
+ON_DEBUG(TreeDumpCreateGraphFile(new_node));
 
         return new_node;
     }
@@ -533,7 +594,7 @@ ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump before nil"));
             *curr_symbol += strlen("nil");
 
         else
-            fprintf(OUTPUT_FILE, "Read from input file error\n");
+            txSpeak("\vRead from input file error: SYNTAX ERROR\n");
 
 ON_DEBUG(Print_Curr_Input_Information(*curr_symbol, "Dump after nil"));
 

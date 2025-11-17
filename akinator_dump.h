@@ -28,7 +28,7 @@
 #define Continue_If_Answer_Error()                                              \
 {                                                                               \
     if (!CheckIfAnswerCorrect()) {                                              \
-            fprintf(OUTPUT_FILE, "Wrong answer format. Try again\n\n");         \
+            fprintf(OUTPUT_FILE, "Wrong answer format. Try again\n\n");        \
             continue;                                                           \
     }                                                                           \
 }
@@ -38,17 +38,38 @@ static char *buffer_begin = NULL;
 
 #define Print_Curr_Input_Information(curr_symbol, dump_information_string)                      \
     {                                                                                           \
-        fprintf(INPUT_LOGFILE, "<h2><font color=\"#CC0000\"><p align=\"center\">Input DUMP"     \
-                    "</p></font></h2>\n<h3><p align=\"center\">%s</p></h3>\n\n",                \
-                    dump_information_string);                                                   \
-        fprintf(INPUT_LOGFILE, "<h4>Input dump from %s at %s:%d:</h4><pre>\n\n",                \
-        __FILE__, __FUNCTION__, __LINE__);                                                      \
-        fprintf(INPUT_LOGFILE, "Buffer from current position is \n%s\n\n", curr_symbol);        \
+        fprintf(SEREGA, "<h3><font color=\"#%s\"><p align=\"center\">Input DUMP"                \
+                    "</p></font></h3><h4><p align=\"center\">%s</p></h4>",                \
+                    ERROR_RED_COLOR, dump_information_string);                                  \
+        fprintf(SEREGA, "<h5>Input dump from %s at %s:%d:</h5>",                       \
+        __FILE__, __FUNCTION__, __LINE__);                                             \
+        char help_curr_symbol = *curr_symbol;                                                \
+        *curr_symbol = '\0';                                                     \
+        fprintf(SEREGA, "<h6><font color=\"#%s\"><p align=\"left\">"                            \
+                "%s</font>", LAVANDER_BLUE_COLOR, buffer_begin);               \
+        *curr_symbol = help_curr_symbol;                                                        \
+        fprintf(SEREGA, "<font color=\"#%s\">"                            \
+                "%s</font></p></h6>", DEEP_BLUE_COLOR, curr_symbol);                   \
     }
 
 //-----------------------------------------------------------------------------
 //-----CONSTANTS--------
+extern const char *DARK_RED_COLOR;
+extern const char *PURPLE_BLUE_COLOR;
+extern const char *LIGHT_PURPLE_PINK_COLOR;
+extern const char *SOFT_PINK_COLOR;
+extern const char *LIGHT_BLUE_COLOR;
+extern const char *DEEP_BLUE_COLOR;
 extern const char *ERROR_RED_COLOR;
+extern const char *LIGHT_PASTEL_RED_COLOR;
+extern const char *HOLY_WIGHT_COLOR;
+extern const char *GRASS_GREEN_COLOR;
+extern const char *LAVANDER_BLUE_COLOR;
+extern const char *COBALITE_COLOR;
+extern const char *LIGHT_YELLOW_GREEN_COLOR;
+extern const char *PASTEL_PURPLE_PINK_COLOR;
+extern const char *LIGHT_GRAY_PURPLE_COLOR;
+extern const char *BRIGHT_GREEN_COLOR;
 extern const char *LAVANDER_PINK_COLOR;
 extern const char *SOFT_PINK_COLOR;
 
@@ -85,7 +106,7 @@ void TreeDump(Tree_t *tree, const char *file_name, const char *function_name,
 void TreeDumpPrintErrors(Tree_t *tree, const char *file_name, const char *function_name,
               int line_number, const char *calling_reason_string, int curr_error);
 
-void TreeDumpCreateGraphFile(Tree_t *tree);
+void TreeDumpCreateGraphFile(TreeNode_t *root);
 char *CreateDotFileName(const char *file_type);
 
 void PrintDotFileHeader(FILE *dot_file_ptr, char *DotFilePngName);
