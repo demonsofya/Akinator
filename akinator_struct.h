@@ -58,6 +58,22 @@ struct Tree_t {
     int nodes_count;
 };
 
+enum AkinatorAnswers {
+    ErrorAkinatorAnswer,
+    GuessCharacterAnswer,
+    PrintDefinitionAnswer,
+    SaveProgressAnswer,
+    LoadBaseAnswer,
+    PrintDifferenceAnswer,
+    EndProgrammAnswer
+};
+
+enum AkinatorNodePaths {
+    NoNode,
+    LeftNode,
+    RightNode
+};
+
 void CloseOutputFile();
 FILE* OpenOutputFile();
 
@@ -67,6 +83,10 @@ void CloseInputLogFile();
 Tree_t *TreeCtor();
 void DeleteNode(Tree_t *tree, TreeNode_t *node);
 void TreeNodeDtor(Tree_t *tree, TreeNode_t *node);
+
+AkinatorAnswers GetUserAnswer();
+void PrintHelp();
+void AkinatorRun(AkinatorAnswers answer, Tree_t *tree);
 
 char *GetAnswerString();
 bool CheckIfAnswerCorrect();

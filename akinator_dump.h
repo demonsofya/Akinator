@@ -54,6 +54,7 @@ static char *buffer_begin = NULL;
 
 //-----------------------------------------------------------------------------
 //-----CONSTANTS--------
+
 extern const char *DARK_RED_COLOR;
 extern const char *PURPLE_BLUE_COLOR;
 extern const char *LIGHT_PURPLE_PINK_COLOR;
@@ -72,6 +73,27 @@ extern const char *LIGHT_GRAY_PURPLE_COLOR;
 extern const char *BRIGHT_GREEN_COLOR;
 extern const char *LAVANDER_PINK_COLOR;
 extern const char *SOFT_PINK_COLOR;
+
+/*
+const char *const DARK_RED_COLOR             = "990000";
+const char *const PURPLE_BLUE_COLOR          = "6666FF";
+const char *const LIGHT_PURPLE_PINK_COLOR    = "baacc7";
+const char *const SOFT_PURPLE_COLOR          = "876f9e";
+const char *const LIGHT_BLUE_COLOR           = "99CCFF";
+const char *const DEEP_BLUE_COLOR            = "0066cc";
+const char *const ERROR_RED_COLOR            = "CC0000";
+const char *const LIGHT_PASTEL_RED_COLOR     = "FF6666";
+const char *const HOLY_WIGHT_COLOR           = "f5f5dc";
+const char *const GRASS_GREEN_COLOR          = "4C9900";
+const char *const LAVANDER_BLUE_COLOR        = "ccccff";
+const char *const COBALITE_COLOR             = "9999ff";
+const char *const LIGHT_YELLOW_GREEN_COLOR   = "CCFF99";
+const char *const PASTEL_PURPLE_PINK_COLOR   = "cfa6e0";
+const char *const LIGHT_GRAY_PURPLE_COLOR    = "e3cced";
+const char *const BRIGHT_GREEN_COLOR         = "66CC00";
+const char *const LAVANDER_PINK_COLOR        = "fff0f5";
+const char *const SOFT_PINK_COLOR            = "ff97bb";
+*/
 
 extern const int MAX_DOT_NAME_SIZE;
 extern const int MAX_DOT_FILE_NAME_SIZE;

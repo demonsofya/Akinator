@@ -13,6 +13,7 @@ const char *DEFAULT_LOG_FILE_NAME = "AkinatorLogFile.html";
 
 //-----------------------------------------------------------------------------
 
+// TODO: move to constants.cpp
 const char *DARK_RED_COLOR             = "990000";
 const char *PURPLE_BLUE_COLOR          = "6666FF";
 const char *LIGHT_PURPLE_PINK_COLOR    = "baacc7";
@@ -35,6 +36,7 @@ const char *SOFT_PINK_COLOR            = "ff97bb";
 const int MAX_DOT_NAME_SIZE      = 100;
 const int MAX_DOT_FILE_NAME_SIZE = 100;
 const int MAX_DOT_COMMAND_SIZE   = 100;
+
 
 //-----------------------------------------------------------------------------
 
